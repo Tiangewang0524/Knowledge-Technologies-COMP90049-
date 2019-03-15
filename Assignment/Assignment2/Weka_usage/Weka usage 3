@@ -1,0 +1,23 @@
+Open "train.arff" again from the "Pre-process" tab (leave the ID alone this time). Open "dev.arff" as the "Supplied test set" in the Classify tab, and choose "NaiveBayes" as the Classifier.
+Before we click "Start", click the "More options..." button. A dialog called "Classifier evaluation options" appears. 
+Here, we can remove some information from the output if we aren't reading it (like the "per-class stats"). Leave these alone for now, and instead click the "Choose" button next to "Output predictions".
+By default, this is "Null". Instead, select "PlainText", and then click "OK" to close this dialog.
+Click "Start". In the output pane, scroll until you find "=== Predictions on test set ===".
+Weka's ("PlainText") predictions look something like this:
+"    inst#     actual  predicted error prediction"
+"        1        1:N        2:Y          +       0.996 "
+Weka assigns numbers to everything, but we don't need to worry too much about them. Instance 1 (the first instance in the development data), has an actual class of "N", but the model predicted "Y". This is an error ("+"). It also shows the prediction score (0.996), which was quite confident, but still wrong.
+You can use this, along with the "dev.txt" file, to manually examine tweets where the model has made an error. Hopefully, this will suggest some reasons why the system isn't working very well.
+How about the test data? Well, assuming that we've already loaded in "train.arff", choose "test.arff" as the "Supplied test set", and "Start" Naive Bayes.
+In the output pane, you will see that Weka won't have attempted to evaluate (because all of the test instances have the class "?") - there are lots of NaN ("not a number") in the evaluation.
+The above is quite useless; let's get rid of it in the "More options..." dialog. Untick all of the boxes. Click "OK", and "Start". You'll see that there is very little output.
+Back in the "More options..." dialog, "Choose" "PlainText" for "Output predictions".
+I always get a million questions about this step, so please read it very carefully. Click the textbox showing "PlainText" next to the "Choose" button. A dialog will appear, helpfully entitled "weka.gui.GenericObjectEditor". (!)
+Enter "1" into the "attributes" textbox. This means that Weka will output the tweet ID, which is less helpful than it sounds, because Weka's internal representation of numbers doesn't have enough precision to store a tweet ID!
+Click the textbox next to "OutputFile", which opens a dialog. Navigate to the directory where you wish to save your test outputs, and then - again, a million questions, so read this carefully - click the textbox next to "File Name:" and type the name of the output file. (For example, "p2-output.txt")
+You might need to include a directory separator, depending on what is in the textbox already. On *nix/Mac, this will look something like "/Users/me/path/to/directory/p2-output.txt". On Windows, it will look something like "C:\Users\me\path\to\directory\p2-output.txt" ... Or, at least, I think that's what Windows paths still look like?
+Close the various dialogs (using "Select", "OK", and "OK") and click "Start". The test predictions will be saved to the file that you selected, and they should look something like:
+"    inst#  actual  predicted error prediction (id)
+       1          1:?        1:N              0.959 (326428925972582400)"
+(You can see the last couple of ID digits have been replaced with 0!)
+This file can be submitted as your test outputs. If you've gotten this far, then you've completed that part of the Project - congratulations! (Although ideally, you'll submit the output on the model with your new attribute(s).)
